@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,9 +157,9 @@ public class DaoHibernate implements IDao {
 		}
 
 		if (manager) {
-			user = new Gestionnaire(nom, prenom, adresse, male, userId, userPwd);
+			user = new Gestionnaire(nom, prenom, adresse, male, userId, hashPassword(userPwd));
 		} else {
-			user = new Client(nom, prenom, adresse, male, userId, userPwd, numClient);
+			user = new Client(nom, prenom, adresse, male, userId, hashPassword(userPwd), numClient);
 		}
 		session.save(user);
 
@@ -203,7 +206,7 @@ public class DaoHibernate implements IDao {
 				if (user == null) {
 					return false;
 				}
-				return (userPwd.equals(user.getUserPwd()));
+				return (verifyPassword(user.getUserPwd(), userPwd));
 			}
 		}
 	}
@@ -216,6 +219,21 @@ public class DaoHibernate implements IDao {
 		Session session = sessionFactory.getCurrentSession();
 		Utilisateur user = session.get(Utilisateur.class, id);
 		return user;
+	}
+
+	public String hashPassword(String passwd) {
+
+		Argon2 argon2 = Argon2Factory.create();
+		try {
+			return argon2.hash(2, 65536, 1, passwd);
+		} finally {
+			argon2.wipeArray(passwd.toCharArray()); // suppression de la memoire de jvm
+		}
+	}
+
+	public static boolean verifyPassword(String hash, String password) {
+		Argon2 argon2 = Argon2Factory.create();
+		return argon2.verify(hash, password);
 	}
 
 	/**

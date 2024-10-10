@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.util.Map;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +159,7 @@ public class TestsDaoHibernate {
         if (user == null) {
             fail("Le compte n'aurait pas du être null.");
         } else if (!"TEST NOM".equals(user.getNom()) && !"TEST PRENOM".equals(user.getPrenom())
-                && !"TEST ADRESSE".equals(user.getAdresse()) && !"TEST PASS".equals(user.getUserPwd())
+                && !"TEST ADRESSE".equals(user.getAdresse()) && !daoHibernate.isUserAllowed(user.getUserPwd(), "TEST PASS")
                 && !"c.exist".equals(user.getUserId())) {
             fail("Les informations de l'utilisateur ne correspondent pas à celle de la BDD.");
         }
@@ -222,7 +225,7 @@ public class TestsDaoHibernate {
             assertEquals("PRENOM", user.getPrenom());
             assertEquals("ADRESSE", user.getAdresse());
             assertEquals("c.new1", user.getUserId());
-            assertEquals("PASS", user.getUserPwd());
+            assertTrue(daoHibernate.isUserAllowed(user.getUserId(), "PASS"));
             assertTrue(user.isMale());
         } catch (TechnicalException he) {
             fail("L'utilisateur aurait du être créé.");
@@ -300,6 +303,8 @@ public class TestsDaoHibernate {
             fail("L'utilisateur n'a pas été supprimé.");
         }
     }
+
+
 
     @Test
     public void testIsUserAllowedUser() {
