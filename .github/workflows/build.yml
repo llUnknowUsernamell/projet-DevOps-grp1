@@ -53,7 +53,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Attendre que MariaDB soit prêt
+      # Attendre que MariaDB soit prêt et que le conteneur démarre complètement
       - name: Wait for MariaDB to be ready
         run: |
           until docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysqladmin --user=root --password=root123 --host=127.0.0.1 --port=3306 ping --silent; do
@@ -62,16 +62,23 @@ jobs:
           done
           sleep 25
 
-      # Copier et importer projet_devops.sql avec chemin absolu
-      - name: Copy and import projet_devops.sql
+      # Copier et vérifier la présence de projet_devops.sql
+      - name: Copy and verify projet_devops.sql
         run: |
-          docker cp $GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
+          docker cp "$GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops.sql" $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
+          docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls /tmp/projet_devops.sql || echo "File not found in container!"
+
+      # Importer projet_devops.sql
+      - name: Import projet_devops.sql
+        run: |
           docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
 
       - name: Copy and import projet_devops_test.sql
         run: |
-          docker cp $GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
+          docker cp "$GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops_test.sql" $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
+          docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls /tmp/projet_devops_test.sql || echo "File not found in container!"
           docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.sql
+
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
