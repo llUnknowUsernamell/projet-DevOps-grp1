@@ -17,11 +17,11 @@ jobs:
         image: mariadb:10.4.1  
         env:
           MYSQL_ROOT_PASSWORD: root123  
-          MYSQL_DATABASE: saes5_db      
+          MYSQL_DATABASE: default_db      
           MYSQL_USER: user
           MYSQL_PASSWORD: user123
         ports:
-          - 3386:3306
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
@@ -53,12 +53,25 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # Attendre que MariaDB soit prêt
       - name: Wait for MariaDB to be ready
         run: |
-          until mysqladmin ping -h "127.0.0.1" --silent; do
+          until docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysqladmin --user=root --password=root123 --host=127.0.0.1 --port=3306 ping --silent; do
             echo "Waiting for MariaDB to be ready..."
-            sleep 2
+            sleep 5
           done
+
+      # Copier et importer project_devops.sql
+      - name: Copy and import projet_devops.sql
+        run: |
+          docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
+
+      # Copier et importer project_devops_test.sql
+      - name: Copy and import projet_devops_test.sql
+        run: |
+          docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.sql
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
