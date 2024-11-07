@@ -71,6 +71,7 @@ jobs:
       # Copier et importer projet_devops.sql
       - name: Copy and import projet_devops.sql
         run: |
+          docker ps
           docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
           docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
 
