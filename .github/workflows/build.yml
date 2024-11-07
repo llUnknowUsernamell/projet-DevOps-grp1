@@ -61,17 +61,22 @@ jobs:
             sleep 5
           done
 
-      # Copier et importer project_devops.sql
+      # Vérifier si /tmp existe dans le conteneur
+      - name: Verify /tmp directory exists in the container
+        run: |
+          docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls -la /tmp
+
+      # Copier et importer projet_devops.sql
       - name: Copy and import projet_devops.sql
         run: |
           docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u user -proot123 projet_devops < /tmp/projet_devops.sql
 
-      # Copier et importer project_devops_test.sql
+      # Copier et importer projet_devops_test.sql
       - name: Copy and import projet_devops_test.sql
         run: |
-          docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.sql
+          docker cp ./db_files_with_argon2hash_passwd/projet_devops_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.s
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
