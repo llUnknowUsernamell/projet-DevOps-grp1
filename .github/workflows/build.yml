@@ -27,8 +27,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-        volumes:
-          - ./db_files_with_argon2hash_passwd:/docker-entrypoint-initdb.d
 
     steps:
       - uses: actions/checkout@v4
@@ -63,22 +61,16 @@ jobs:
             sleep 5
           done
 
-       # Attendre que MariaDB soit prêt
-      - name: Wait for MariaDB to be ready
+      # Copier et importer projet_devops.sql avec chemin absolu
+      - name: Copy and import projet_devops.sql
         run: |
-          until docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysqladmin --user=root --password=root123 --host=127.0.0.1 --port=3306 ping --silent; do
-            echo "Waiting for MariaDB to be ready..."
-            sleep 5
-          done
+          docker cp $GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
 
-      # Importer les fichiers SQL directement depuis le volume monté
-      - name: Import projet_devops.sql
+      - name: Copy and import projet_devops_test.sql
         run: |
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /docker-entrypoint-initdb.d/projet_devops.sql
-
-      - name: Import projet_devops_test.sql
-        run: |
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /docker-entrypoint-initdb.d/projet_devops_test.sql
+          docker cp $GITHUB_WORKSPACE/db_files_with_argon2hash_passwd/projet_devops_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.sql
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
