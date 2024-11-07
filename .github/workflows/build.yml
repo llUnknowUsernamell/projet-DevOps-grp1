@@ -27,6 +27,8 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+        volumes:
+          - ${{ github.workspace }}/db_files_with_argon2hash_passwd:/tmp/db_files
 
     steps:
       - uses: actions/checkout@v4
@@ -61,25 +63,22 @@ jobs:
             sleep 5
           done
 
-      # Vérifier si /tmp existe dans le conteneur
-      - name: Verify /tmp directory exists in the container
+       # Vérifier si /tmp existe dans le conteneur et que les fichiers sont bien montés
+      - name: Verify /tmp/db_files directory and files
         run: |
+          docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls -la /tmp/db_files
           ls ./db_files_with_argon2hash_passwd/projet_devops.sql
           ls ./db_files_with_argon2hash_passwd/projet_devops_test.sql
-          docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls -la /tmp
 
-      # Copier et importer projet_devops.sql 
-      - name: Copy and import projet_devops.sql
+      # Importer projet_devops.sql depuis le volume monté
+      - name: Import projet_devops.sql
         run: |
-          docker ps
-          docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/db_files/projet_devops.sql
 
-      # Copier et importer projet_devops_test.sql
-      - name: Copy and import projet_devops_test.sql
+      # Importer projet_devops_test.sql depuis le volume monté
+      - name: Import projet_devops_test.sql
         run: |
-          docker cp ./db_files_with_argon2hash_passwd/projet_devops_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.s
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/db_files/projet_devops_test.sql
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
