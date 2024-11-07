@@ -60,6 +60,7 @@ jobs:
             echo "Waiting for MariaDB to be ready..."
             sleep 5
           done
+          sleep 25
 
       # Copier et importer projet_devops.sql avec chemin absolu
       - name: Copy and import projet_devops.sql
