@@ -28,7 +28,7 @@ jobs:
           --health-timeout=5s
           --health-retries=3
         volumes:
-          - ${{ github.workspace }}/db_files_with_argon2hash_passwd:/tmp/db_files
+          - ./db_files_with_argon2hash_passwd:/docker-entrypoint-initdb.d
 
     steps:
       - uses: actions/checkout@v4
@@ -71,17 +71,14 @@ jobs:
             sleep 5
           done
 
-      # Copier et importer projet_devops.sql
-      - name: Copy and import projet_devops.sql
+      # Importer les fichiers SQL directement depuis le volume monté
+      - name: Import projet_devops.sql
         run: |
-          docker cp ./db_files_with_argon2hash_passwd/projet_devops.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /tmp/projet_devops.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops < /docker-entrypoint-initdb.d/projet_devops.sql
 
-      # Copier et importer projet_devops_test.sql
-      - name: Copy and import projet_devops_test.sql
+      - name: Import projet_devops_test.sql
         run: |
-          docker cp ./db_files_with_argon2hash_passwd/projet_devops_test.sql $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
-          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /tmp/projet_devops_test.sql
+          docker exec -i $(docker ps -q --filter "ancestor=mariadb:10.4.1") mysql -u root -proot123 projet_devops_test < /docker-entrypoint-initdb.d/projet_devops_test.sql
 
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
