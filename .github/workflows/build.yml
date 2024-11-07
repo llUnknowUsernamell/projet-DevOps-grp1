@@ -92,7 +92,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify -Dspring.profiles.active=github org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1
         
       - name: Afficher les logs de test en cas d'échec
         if: failure()
