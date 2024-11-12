@@ -8,6 +8,7 @@
 	<packaging>war</packaging>
 	<name>_00_ASBank2023</name>
 
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.organization>llunknowusernamell</sonar.organization>
