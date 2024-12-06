@@ -21,7 +21,7 @@ jobs:
           MYSQL_USER: user
           MYSQL_PASSWORD: user123
         ports:
-          - 3306:3306
+          - 3336:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
