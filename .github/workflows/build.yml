@@ -21,7 +21,7 @@ jobs:
           MYSQL_USER: user
           MYSQL_PASSWORD: user123
           DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false
-          TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test?useSSL=false
+          DB_TEST_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test?useSSL=false
           DB_USER: root
           DB_PASSWORD: root123
           
