@@ -93,6 +93,12 @@ jobs:
           echo "DB_PASSWORD=root123" >> $GITHUB_ENV
         shell: bash
       
+       - name: Display environment variables for debugging
+        run: |
+          echo "DB_URL is $DB_URL"
+          echo "TEST_DB_URL is $TEST_DB_URL"
+        shell: bash
+        
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
         env:
