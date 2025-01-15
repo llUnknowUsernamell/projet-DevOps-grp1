@@ -33,11 +33,10 @@ jobs:
         with:
           fetch-depth: 0
 
-
       - name: Set environment variable for database
         run: echo "DB_URL=jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false" >> $GITHUB_ENV
         shell: bash
-       - name: Set environment variable for test database
+      - name: Set environment variable for test database
         run: echo "TEST_DB_URL=jdbc:mysql://127.0.0.1:3306/projet_devops_test" >> $GITHUB_ENV
         shell: bash
 
