@@ -31,7 +31,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
+
+
+      - name: Set environment variable for database
+        run: echo "DB_URL=jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false" >> $GITHUB_ENV
+        shell: bash
+       - name: Set environment variable for test database
+        run: echo "TEST_DB_URL=jdbc:mysql://127.0.0.1:3306/projet_devops_test" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Set database credentials
+        run: |
+          echo "DB_USER=root" >> $GITHUB_ENV
+          echo "DB_PASSWORD=root123" >> $GITHUB_ENV
+        shell: bash
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
