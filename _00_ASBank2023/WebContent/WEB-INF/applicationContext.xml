@@ -50,8 +50,8 @@
 			<property name="username" value="root" />
 			<property name="password"  value="root123" />-->
 		<property name="url" value="${DB_URL:jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false}" />
-		<property name="username" value="${DB_USER}" />
-		<property name="password" value="${DB_PASSWORD}" />
+		<property name="username" value="${DB_USER:root}" />
+		<property name="password" value="${DB_PASSWORD:root123}" />
 	</bean>
 
 	<!-- ============= Gestion des Transactions ============= -->

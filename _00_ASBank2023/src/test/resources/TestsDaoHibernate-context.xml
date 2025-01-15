@@ -43,8 +43,8 @@
 		<property name="username" value="root" />
 		<property name="password" value="root123" />-->
 		<property name="url" value="${DB_TEST_URL:jdbc:mysql://127.0.0.1:3306/projet_devops_test}" />
-		<property name="username" value="${DB_USER}" />
-		<property name="password" value="${DB_PASSWORD}" />
+		<property name="username" value="${DB_USER:root}" />
+		<property name="password" value="${DB_PASSWORD:root123}" />
 
 		<!-- Nécessaire, sinon les test se font quand même -->
 		<property name="defaultAutoCommit" value="false" />
