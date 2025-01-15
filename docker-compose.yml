@@ -1,0 +1,58 @@
+services:
+
+  # Service MariaDB (base de données)
+  db_asbank:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: mariadb  # Utilise la phase mariadb du Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: projet_devops_test
+      MYSQL_USER: user123
+      MYSQL_PASSWORD: userpass123
+    volumes:
+      - ./docker_files/config_containers/config_db/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3307:3306"
+    networks:
+      - as-bank-network
+
+  # Service Maven (compilation)
+  mvn_jdk11:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes: 
+      - ./docker_files/docker_built:/etc/temp_built
+    environment:
+      DB_URL: jdbc:mysql://db_asbank:3306/projet_devops?useSSL=false
+      DB_TEST_URL: jdbc:mysql://db_asbank:3306/projet_devops_test?useSSL=false
+      DB_USER: root
+      DB_PASSWORD: root123
+    depends_on:
+      - db_asbank
+    networks:
+      - as-bank-network
+
+  # Service Tomcat 
+  tomcat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: execution 
+    volumes:
+      - ./docker_files/docker_built:/etc/temp_built
+    ports:
+      - "8089:8080"  
+    depends_on:
+      - mvn_jdk11
+    networks:
+      - as-bank-network
+
+
+
+networks:
+  as-bank-network:
+    driver: bridge
