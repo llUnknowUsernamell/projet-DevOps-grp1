@@ -49,6 +49,7 @@
 		<property name="url" value="${DB_URL}" />
 			<property name="username" value="${DB_USER}" />
 			<property name="password"  value="${DB_PASSWORD}" />
+			
 	</bean>
 
 	<!-- ============= Gestion des Transactions ============= -->
