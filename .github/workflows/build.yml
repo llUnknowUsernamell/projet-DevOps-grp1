@@ -94,7 +94,9 @@ jobs:
           TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test
           DB_USER: root
           DB_PASSWORD: root123
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1 \
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1 \
             -DDB_URL=$DB_URL \
             -DTEST_DB_URL=$TEST_DB_URL \
             -DDB_USER=$DB_USER \
