@@ -46,9 +46,9 @@
 		<property name="driverClassName"
 			value="com.mysql.jdbc.Driver" />
 
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false" />
-			<property name="username" value="root" />
-			<property name="password"  value="root123" />
+		 <property name="url" value="#{systemEnvironment['DB_URL']}" />
+    <property name="username" value="#{systemEnvironment['DB_USERNAME']}" />
+    <property name="password" value="#{systemEnvironment['DB_PASSWORD']}" />
 	</bean>
 
 	<!-- ============= Gestion des Transactions ============= -->
