@@ -84,28 +84,13 @@ jobs:
           docker cp "$GITHUB_WORKSPACE/db_files/projet_devops_test.sql" $(docker ps -q --filter "ancestor=mariadb:10.4.1"):/tmp/projet_devops_test.sql
           docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") ls /tmp/projet_devops_test.sql || echo "File not found in container!"
           docker exec $(docker ps -q --filter "ancestor=mariadb:10.4.1") /bin/sh -c "cat /tmp/projet_devops_test.sql | mysql -u root -proot123 projet_devops_test"
-      - name: Set environment variables
-        run: |
-          echo "DB_URL=jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false" >> $GITHUB_ENV
-          echo "DB_TEST_URL=jdbc:mysql://127.0.0.1:3306/projet_devops_test" >> $GITHUB_ENV
-          echo "DB_USER=root" >> $GITHUB_ENV
-          echo "DB_PASSWORD=root123" >> $GITHUB_ENV
     
       - name: Build and analyze
         working-directory: ./_00_ASBank2023
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          DB_URL: ${{ secrets.DB_URL }}  # Optionnel, tu peux aussi utiliser les valeurs définies ci-dessus
-          DB_TEST_URL: ${{ secrets.DB_TEST_URL }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1 \
-            -DDB_URL=$DB_URL \
-            -DDB_TEST_URL=$DB_TEST_URL \
-            -DDB_USER=$DB_USER \
-            -DDB_PASSWORD=$DB_PASSWORD         
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=llUnknowUsernamell_projet-DevOps-grp1 
         
       # Afficher les logs de tests en cas d'échec
       - name: Display test reports on failure
