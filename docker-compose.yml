@@ -28,8 +28,8 @@ services:
       - ./docker_files/docker_built:/etc/temp_built
     environment:
       DB_URL: jdbc:mysql://db_asbank:3306/projet_devops?useSSL=false
-      DB_TEST_URL: jdbc:mysql://db_asbank:3306/projet_devops_test?useSSL=false
-      DB_USER: root
+      DB_TEST_URL: jdbc:mysql://db_asbank:3306/projet_devops_test
+      DB_USERNAME: root
       DB_PASSWORD: root123
     depends_on:
       - db_asbank
@@ -46,6 +46,11 @@ services:
       - ./docker_files/docker_built:/etc/temp_built
     ports:
       - "8089:8080"  
+    environment:
+      DB_URL: jdbc:mysql://db_asbank:3306/projet_devops?useSSL=false
+      DB_TEST_URL: jdbc:mysql://db_asbank:3306/projet_devops_test
+      DB_USERNAME: root
+      DB_PASSWORD: root123
     depends_on:
       - mvn_jdk11
     networks:

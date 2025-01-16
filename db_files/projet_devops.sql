@@ -7,6 +7,10 @@
 -- Version du serveur : 10.4.1-MariaDB-1:10.4.1+maria~bionic
 -- Version de PHP : 8.2.8
 
+
+CREATE DATABASE IF NOT EXISTS projet_devops;
+USE projet_devops;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";

@@ -1,5 +1,5 @@
 FROM mariadb:10.5 AS mariadb
-COPY ./docker_databases/*.sql /docker-entrypoint-initdb.d/
+COPY ./db_files/*.sql /docker-entrypoint-initdb.d/
 
 
 FROM openjdk:11-jdk-slim AS builder
@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY ./_00_ASBank2023 .
 
-COPY ./wait-for-warFile.sh .
+COPY ./docker_files/wait-for-warFile.sh .
 
 RUN chmod u+x ./wait-for-warFile.sh
 
