@@ -11,6 +11,11 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    env:
+      DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false
+      DB_TEST_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test
+      DB_USERNAME: root
+      DB_PASSWORD: root123
 
     services:
       mariadb:
