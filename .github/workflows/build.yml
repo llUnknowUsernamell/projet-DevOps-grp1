@@ -87,6 +87,11 @@ jobs:
 
      
       - name: Debug Maven properties
+        env:
+          DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false
+          TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test
+          DB_USER: root
+          DB_PASSWORD: root123
         run: |
           echo "DB_URL: $DB_URL"
           echo "TEST_DB_URL: $TEST_DB_URL"
@@ -97,8 +102,3 @@ jobs:
             -DTEST_DB_URL="$TEST_DB_URL" \
             -DDB_USER="$DB_USER" \
             -DDB_PASSWORD="$DB_PASSWORD"
-        env:
-          DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops?useSSL=false
-          TEST_DB_URL: jdbc:mysql://127.0.0.1:3306/projet_devops_test
-          DB_USER: root
-          DB_PASSWORD: root123
