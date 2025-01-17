@@ -15,7 +15,10 @@ COPY ./_00_ASBank2023 .
 
 COPY ./docker_files/wait-for-warFile.sh .
 
+RUN sed -i 's/\r$//' ./wait-for-warFile.sh
+
 RUN chmod u+x ./wait-for-warFile.sh
+
 
 RUN mvn -B -f pom.xml dependency:resolve
 

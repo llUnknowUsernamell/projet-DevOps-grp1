@@ -12,6 +12,7 @@ services:
       MYSQL_USER: user123
       MYSQL_PASSWORD: userpass123
     volumes:
+      - ./docker_files/data_db:/var/lib/mysql
       - ./docker_files/config_containers/config_db/my.cnf:/etc/mysql/my.cnf
     ports:
       - "3307:3306"
