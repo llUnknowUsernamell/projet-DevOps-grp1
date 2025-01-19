@@ -49,12 +49,14 @@
 		</s:if>
 		<br />
 	</p>
-	<s:form name="formOperation" action="creditAction" method="post">
+	<s:form name="formOperation" action="transactionAction" method="post">
 		<s:textfield label="Montant" name="montant" />
-		<input type="hidden" name="compte"
-			value="<s:property value='compte' />">
-		<s:submit value="Crediter" />
-		<s:submit value="Debiter" action="debitAction" />
+		<input type="hidden" name="compte" value="<s:property value='compte' />">
+
+		<input type="hidden" name="actionType" value="creditAction" />
+		<s:submit value="Crediter" onclick="this.form.actionType.value='creditAction'; this.form.action='creditAction';"/>
+		<s:submit value="Debiter" onclick="this.form.actionType.value='debitAction'; this.form.action='debitAction';"/>
+
 	</s:form>
 
 	<s:url action="urlDetail" var="urlDetail">

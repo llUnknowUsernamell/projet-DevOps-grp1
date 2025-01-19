@@ -49,12 +49,14 @@
 		</s:if>
 		<br />
 	</p>
-	<s:form name="formOperation" action="creditActionEdit" method="post">
+	<s:form name="formOperation" method="post">
 		<s:textfield label="Montant" name="montant" />
-		<input type="hidden" name="compte"
-			value="<s:property value='compte.numeroCompte' />">
-		<s:submit value="Crediter" />
-		<s:submit value="Debiter" action="debitActionEdit" />
+		<input type="hidden" name="compte" value="<s:property value='compte.numeroCompte' />">
+		<input type="hidden" name="actionType" value="creditActionEdit" />
+		<s:submit value="Crediter" onclick="this.form.actionType.value='creditActionEdit'; this.form.action='creditActionEdit';"/>
+		<s:submit value="Debiter" onclick="this.form.actionType.value='debitActionEdit'; this.form.action='debitActionEdit';"/>
+
+
 	</s:form>
 
 	<s:if test="%{compte.className == \"CompteAvecDecouvert\"}">
