@@ -67,11 +67,25 @@ public class TestsBanque {
         try {
             // Solde initial : 50, Découvert autorisé : 40
             banque.debiter(compteAvecDecouvert, 85); // Résultat attendu : Solde = -35
-            assertEquals(-150, compteAvecDecouvert.getSolde(), 0.001);
+            assertEquals(-35, compteAvecDecouvert.getSolde(), 0.001);
         } catch (Exception e) {
             fail("Aucune exception ne devrait être levée pour ce test.");
         }
     }
+
+    @Test
+    public void testDebiterAuDelaDuDecouvert() {
+        try {
+            // Solde initial : 50, Découvert autorisé : 40
+            banque.debiter(compteAvecDecouvert, 100); // Dépasse le plafond
+            fail("Une InsufficientFundsException aurait dû être levée.");
+        } catch (InsufficientFundsException e) {
+            // Succès : exception attendue
+        } catch (Exception e) {
+            fail("Exception inattendue : " + e.getClass().getSimpleName());
+        }
+    }
+
 
 
 
