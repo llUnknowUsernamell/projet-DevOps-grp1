@@ -122,6 +122,18 @@ public class Connect extends ActionSupport {
 		return banque.getConnectedUser();
 	}
 
+	public String getRefreshedUser() {
+		try {
+			// Charger les données de l'utilisateur
+			banque.loadUser();
+			return "SUCCESS";
+		} catch (Exception e) {
+			// Log de l'erreur pour diagnostic
+			e.printStackTrace();
+			System.out.println("Erreur lors du rechargement des données utilisateur : " + e.getMessage());
+			return "ERROR";
+		}
+	}
 	/**
 	 * Méthode qui va récupérer sous forme de map la liste des comptes du client
 	 * actuellement connecté à l'application

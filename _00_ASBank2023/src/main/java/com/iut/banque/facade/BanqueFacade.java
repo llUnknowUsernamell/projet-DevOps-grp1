@@ -246,6 +246,15 @@ public class BanqueFacade {
 		}
 	}
 
+	/*load ou reload les données actuelles de l'utilisateur depuis la base de données */
+	public void loadUser() {
+		if (loginManager.getConnectedUser() instanceof Utilisateur || loginManager.getConnectedUser() instanceof Gestionnaire) {
+			Utilisateur user = loginManager.getConnectedUser();
+			Utilisateur updatedUser = banqueManager.getUserById(user.getUserId());
+			loginManager.setCurrentUser(updatedUser);
+		}
+	}
+
 	/**
 	 * Méthode pour récupérer un objet compte basé sur son String identidiant
 	 * 

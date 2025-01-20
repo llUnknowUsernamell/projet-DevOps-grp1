@@ -36,8 +36,9 @@
 		</action>
 
 		<!-- Permet un retour 'static' vers la page principal pour les clients -->
-		<action name="retourTableauDeBordClient" class="com.iut.banque.controller.Connect">
-			<result>/JSP/Connect.jsp</result>
+		<action name="retourTableauDeBordClient" class="com.iut.banque.controller.Connect" method="getRefreshedUser">
+		<result name="SUCCESS">/JSP/Connect.jsp</result>
+		<result name="ERROR">/JSP/LoadUser-Error.jsp</result>
 		</action>
 
 		<!-- Permet un retour 'static' vers la page principal pour le manager -->
