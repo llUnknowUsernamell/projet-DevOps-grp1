@@ -1,0 +1,9 @@
+Bug non bloquant résolu : Problème d'actualisation lorsqu'en tant que client l'on crédite ou débite le compte. Après l'avoir fait, si l'utilisateur retourne sur la page d'affichage des comptes, la somme n'est pas mise à jour, à moins de logout.
+
+Ajout de la méthode getRefreshedUser() dans controller/Connect.java
+
+Ajout de la méthode loadUser() dans facade/BanqueFacade.java
+
+Modification de l'action retourTableauDeBordClient dans  /test/struts.xml
+
+Permet de réactualiser l'objet user depuis les données de la base de données.
