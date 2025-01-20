@@ -3,6 +3,8 @@ package com.iut.banque.controller;
 import com.iut.banque.exceptions.IllegalFormatException;
 import com.iut.banque.exceptions.IllegalOperationException;
 import com.iut.banque.modele.CompteAvecDecouvert;
+import com.iut.banque.modele.Gestionnaire;
+import com.iut.banque.modele.Utilisateur;
 
 public class DetailCompteEdit extends DetailCompte {
 
@@ -53,6 +55,14 @@ public class DetailCompteEdit extends DetailCompte {
 			return "NEGATIVEOVERDRAFT";
 		} catch (IllegalOperationException e) {
 			return "INCOMPATIBLEOVERDRAFT";
+		}
+	}
+
+	public String managerIsConnected() {
+		if (banque.getConnectedUser() instanceof Gestionnaire) {
+			return "SUCCESS";
+		} else {
+			return "ERROR";
 		}
 	}
 

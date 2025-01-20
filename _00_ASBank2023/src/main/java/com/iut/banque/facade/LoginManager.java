@@ -49,6 +49,8 @@ public class LoginManager {
 		}
 	}
 
+
+
 	/**
 	 * Getter pour avoir l'objet Utilisateur de celui qui est actuellement
 	 * connecté à l'application

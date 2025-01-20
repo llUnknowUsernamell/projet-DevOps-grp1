@@ -62,8 +62,9 @@
 
 		<!-- Appel de la page compte avec un paramètre donné -->
 
-		<action name="urlDetail" class="com.iut.banque.controller.DetailCompte">
-			<result name="success">/JSP/DetailCompte.jsp</result>
+		<action name="urlDetail" class="com.iut.banque.controller.DetailCompte" method="isConnected">
+			<result name="SUCCESS">/JSP/DetailCompte.jsp</result>
+			<result name="ERROR">/JSP/LoadUser-error.jsp</result>
 		</action>
 
 		<action name="listeCompteManager" class="com.iut.banque.controller.ListeCompteManager">
@@ -135,9 +136,9 @@
 
 		<!-- Modification d'un compte par un manager -->
 
-		<action name="editAccount" class="com.iut.banque.controller.DetailCompteEdit">
+		<action name="editAccount" class="com.iut.banque.controller.DetailCompteEdit" method="managerIsConnected">
 			<result name="SUCCESS">/JSP/DetailCompteEdit.jsp</result>
-			<result>/JSP/DetailCompteEdit.jsp</result>
+			<result name="ERROR">/JSP/LoadUser-error.jsp</result>
 		</action>
 
 		<action name="changerDecouvertAutoriseAction" class="com.iut.banque.controller.DetailCompteEdit"

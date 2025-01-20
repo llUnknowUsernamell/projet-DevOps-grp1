@@ -1,5 +1,6 @@
 package com.iut.banque.controller;
 
+import com.iut.banque.modele.Utilisateur;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -158,6 +159,14 @@ public class DetailCompte extends ActionSupport {
 		} catch (IllegalFormatException e) {
 			e.printStackTrace();
 			return "NEGATIVEAMOUNT";
+		}
+	}
+
+	public String isConnected() {
+		if (banque.getConnectedUser() instanceof Utilisateur) {
+			return "SUCCESS";
+		} else {
+			return "ERROR";
 		}
 	}
 }
