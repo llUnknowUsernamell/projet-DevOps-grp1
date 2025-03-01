@@ -21,11 +21,13 @@ services:
 
   # Service Maven (compilation)
   mvn_jdk11:
+    container_name: projet-devops-jdk11
     build:
       context: .
       dockerfile: Dockerfile
       target: builder
-    volumes: 
+    volumes:
+      - ./docker_files/drivers:/app/drivers
       - ./docker_files/docker_built:/etc/temp_built
     environment:
       DB_URL: jdbc:mysql://db_asbank:3306/projet_devops?useSSL=false
@@ -39,6 +41,7 @@ services:
 
   # Service Tomcat 
   tomcat:
+    container_name: tomcat-server
     build:
       context: .
       dockerfile: Dockerfile
