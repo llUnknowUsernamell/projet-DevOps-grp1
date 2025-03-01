@@ -1,0 +1,8 @@
+services:
+  selenium-builder:
+    build:
+      context: .
+      dockerfile: selenium.dockerfile
+    network_mode: "host"
+    container_name: selenium-builder-container
+

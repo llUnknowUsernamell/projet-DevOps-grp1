@@ -51,18 +51,20 @@ public class SeleniumTests {
         }
     }
 
+
+
     @Test
     public void testAffichageLogoUnivDansLAccueil() {
-        driver.get("http://tomcat-server:8080/AS_Bank");
+        driver.get("http://localhost:8089/AS_Bank");
         WebElement logo = driver.findElement(By.xpath("/html/body/p[1]/img")); // logo univ-lorraine (utilisation du XPath)
 
         Assert.assertTrue("Le logo ne s'affiche pas", logo.isDisplayed());
         tearDown();
     }
 
-    @Test
+   @Test
     public void testConnexionUtilisateur() {
-        driver.get("http://tomcat-server:8080/AS_Bank");
+        driver.get("http://localhost:8089/AS_Bank");
         driver.findElement(By.xpath("/html/body/p[2]/a")).click();
         WebElement usernameField = driver.findElement(By.id("controller_Connect_login_action_userCde"));
         WebElement passwordField = driver.findElement(By.id("controller_Connect_login_action_userPwd"));

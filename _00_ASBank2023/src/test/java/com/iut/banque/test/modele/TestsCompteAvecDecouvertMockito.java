@@ -1,78 +1,65 @@
 package com.iut.banque.test.modele;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
-
 import com.iut.banque.exceptions.IllegalFormatException;
 import com.iut.banque.exceptions.IllegalOperationException;
 import com.iut.banque.exceptions.InsufficientFundsException;
 import com.iut.banque.modele.Client;
 import com.iut.banque.modele.CompteAvecDecouvert;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TestsCompteAvecDecouvertMockito {
 
-    private CompteAvecDecouvert compte;
+    @Mock
     private Client clientMock;
 
-    @Before
-    public void setUp() throws IllegalFormatException, IllegalOperationException {
-        clientMock = mock(Client.class);
+    private CompteAvecDecouvert compte;
+
+    @Test
+    public void testGetClassNameAvecDecouvert() throws IllegalFormatException, IllegalOperationException {
         compte = new CompteAvecDecouvert("FR0123456789", 100, 100, clientMock);
+        Assert.assertEquals("CompteAvecDecouvert", compte.getClass().getSimpleName());
     }
 
-    /**
-     * Test de la classe getClassName() pour les CompteAvecDecouvert
-     */
     @Test
-    public void testGetClassNameAvecDecouvert() {
-        assertEquals("CompteAvecDecouvert", compte.getClass().getSimpleName());
-    }
+    public void testCrediterCompteMontantNegatif() throws IllegalFormatException, IllegalOperationException {
+        compte = new CompteAvecDecouvert("FR0123456789", 100, 100, clientMock);
 
-    /**
-     * Test de la méthode débiter avec un montant négatif
-     */
-    @Test
-    public void testCrediterCompteMontantNegatif() {
         try {
             compte.debiter(-100);
-            fail("La méthode n'a pas renvoyé d'exception!");
+            Assert.fail("La méthode n'a pas renvoyé d'exception!");
         } catch (IllegalFormatException ife) {
-            // Exception attendue
         } catch (Exception e) {
-            fail("Exception de type " + e.getClass().getSimpleName()
-                    + " récupérée alors qu'un IllegalFormatException était attendu");
+            Assert.fail("Exception de type " + e.getClass().getSimpleName()
+                    + " récupérée alors qu'une IllegalFormatException était attendue");
         }
     }
 
-    /**
-     * Test du débit d'un montant valide pour un compte avec découvert
-     */
     @Test
-    public void testDebiterCompteAvecDecouvertValeurPossible() throws IllegalFormatException {
+    public void testDebiterCompteAvecDecouvertValeurPossible() throws IllegalFormatException, IllegalOperationException {
+        compte = new CompteAvecDecouvert("FR0123456789", 100, 100, clientMock);
+
         try {
             compte.debiter(150);
-            assertEquals(-50.0, compte.getSolde(), 0.0001);
+            Assert.assertEquals(-50.0, compte.getSolde(), 0.0001);
         } catch (InsufficientFundsException e) {
-            fail("Il ne devrait pas avoir d'exception ici.");
+            Assert.fail("Il ne devrait pas y avoir d'exception ici.");
         }
     }
 
-    /**
-     * Test du débit d'un montant trop élevé pour un compte avec découvert
-     */
     @Test
-    public void testDebiterCompteAvecDecouvertValeurImpossible() throws IllegalFormatException {
+    public void testDebiterCompteAvecDecouvertValeurImpossible() throws IllegalFormatException, IllegalOperationException {
+        compte = new CompteAvecDecouvert("FR0123456789", 100, 100, clientMock);
+
         try {
             compte.debiter(250);
-            fail("Il devrait avoir une InsufficientFundsException ici.");
+            Assert.fail("Il devrait y avoir une InsufficientFundsException ici.");
         } catch (InsufficientFundsException e) {
-            // Exception attendue
         }
     }
-
-
 }

@@ -27,7 +27,6 @@ services:
       dockerfile: Dockerfile
       target: builder
     volumes:
-      - ./docker_files/drivers:/app/drivers
       - ./docker_files/docker_built:/etc/temp_built
     environment:
       DB_URL: jdbc:mysql://db_asbank:3306/projet_devops?useSSL=false
