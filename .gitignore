@@ -1,2 +1,3 @@
 docker_files/docker_built/*
 docker_files/data_db
+.idea
